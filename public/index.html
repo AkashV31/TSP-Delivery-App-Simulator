@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mumbai TSP Delivery App</title>
+  <meta name="description" content="TSP-optimised delivery route simulator for Mumbai using real OSRM road data, live traffic simulation, and dynamic rerouting." />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- ══ LEFT PANEL: Map + Timeline ══════════════════════════ -->
+    <div class="panel left-panel">
+
+      <!-- Map (top) -->
+      <div id="map">
+        <div class="map-legend">
+          <b>Route Legend</b>
+          <div class="legend-row"><span class="legend-line" style="background:#4CAF50"></span> Clear traffic</div>
+          <div class="legend-row"><span class="legend-line" style="background:#FF9800"></span> Slow traffic</div>
+          <div class="legend-row"><span class="legend-line" style="background:#F44336"></span> Heavy traffic</div>
+          <div class="legend-row"><span class="legend-line dashed"></span> Travelled</div>
+        </div>
+      </div>
+
+      <!-- Controls (bottom) -->
+      <div class="controls-container">
+
+        <!-- Route Timeline -->
+        <div id="timeline-section" style="display:none;">
+          <h3>Route Timeline</h3>
+          <div class="timeline" id="route-timeline"></div>
+        </div>
+
+        <!-- Warehouse selector -->
+        <div class="section">
+          <h3>Starting Warehouse</h3>
+          <div class="select-wrapper">
+            <select id="warehouse-select">
+              <option value="" disabled selected>Select Primary Warehouse</option>
+              <option value="W1">Dadar Central Hub</option>
+              <option value="W2">Bandra West Hub</option>
+              <option value="W3">Andheri West Logistics</option>
+              <option value="W4">Borivali Depot</option>
+              <option value="W5">Kurla Dispatch Center</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ RIGHT PANEL: Inventory + Controls ═══════════════════ -->
+    <div class="panel right-panel">
+
+      <!-- Header -->
+      <div class="inventory-header">
+        <h2>Inventory Parcels</h2>
+        <p class="subtitle">Select up to 10 parcels for today's run.</p>
+        <div class="status-indicator"><span id="parcel-count">0</span> selected</div>
+      </div>
+
+      <!-- Scrollable parcel list -->
+      <div id="inventory-bar" class="inventory-bar"></div>
+
+      <!-- Loading indicator -->
+      <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loader"></div>
+        <p>Computing optimal TSP route…</p>
+      </div>
+
+      <!-- Route Result -->
+      <div id="route-result" class="route-result hidden">
+        <h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Optimal Route Computed
+        </h3>
+        <div id="route-stats"></div>
+      </div>
+
+      <!-- Calculate button -->
+      <div class="actions">
+        <button id="calculate-btn" class="primary-btn">Generate Optimal Route</button>
+      </div>
+
+      <!-- Simulation controls -->
+      <div id="simulation-controls" class="hidden">
+        <h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          Simulation
+        </h3>
+        <div class="sim-controls-row">
+          <label>
+            <input type="checkbox" id="dynamic-reroute" checked style="width:15px;height:15px;cursor:pointer;accent-color:#1a1a2e;">
+            Enable Dynamic Rerouting
+          </label>
+          <select id="sim-speed">
+            <option value="1">1× Speed</option>
+            <option value="2">2× Speed</option>
+            <option value="5">5× Speed</option>
+          </select>
+        </div>
+        <button id="simulate-btn" class="primary-btn" style="background:#1565C0;">Start Delivery Simulator</button>
+        <p id="sim-status"></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <!-- App logic -->
+  <script src="script.js"></script>
+</body>
+</html>
